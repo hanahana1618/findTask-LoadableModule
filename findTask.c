@@ -2,21 +2,23 @@
 #include <linux/module.h>    // Core header for loading LKMs into the kernel
 #include <linux/kernel.h>    // Contains types, macros, functions for the kernel - printk()
 #include <linux/errno.h>     // error codes
-#include <linux/sched.h>     //scheduler for the kernel, include the PID info  
-#include <linux/string.h>    //include string compare on line 34     
+#include <linux/sched.h>     //scheduler  
+#include <linux/string.h> //kernel string library 
+
 
 MODULE_LICENSE("GPL");       ///< The license type -- this affects runtime behavior
-MODULE_AUTHOR("Prieto Castro");       ///< The author -- visible when you use modinfo
-MODULE_DESCRIPTION("A Linux loadable module that checks is a process is running and reports it. Written for Embedded OS at FIU.");  ///< The description -- see modinfo
-MODULE_VERSION("0.1");              ///< The version of the module
+MODULE_AUTHOR("Jorge Lima");       ///< The author -- visible when you use modinfo
+MODULE_DESCRIPTION("A simple Linux Loadable Module");  ///< The description -- see modinfo
+MODULE_VERSION("1.0");              ///< The version of the module
 
-static char *name = "init";   ///< An example LKM argument -- default value is the process with PID 1 because it exists in every computer
-struct task_struct *task;
+static char *name = "init";   ///< An example LKM argument -- default value is "world"
+struct stask_struct *task; ///<Pointer to task structure
+static void find_proc(char *process); ///<Function to find a specidied running process
 
 module_param(name, charp, S_IRUGO);
 ///< Param desc. charp = char ptr, S_IRUGO can be read/not changed
 
-MODULE_PARM_DESC(name, "The process name to be found");  ///< parameter descript
+MODULE_PARM_DESC(name, "The name of the process to be found");  ///< parameter descript
 
 /** @brief The LKM initialization function
  *  The static keyword restricts the visibility of the function to within this C file. The __init
@@ -25,19 +27,30 @@ MODULE_PARM_DESC(name, "The process name to be found");  ///< parameter descript
  *  @return returns 0 if successful
  */
 static int __init hello_init(void){
-   printk(KERN_INFO "Finding process %s in list of running processes\n", name);
+	printk(KERN_INFO "init function\n");
+ 	 find_proc(name);
+  	 return 0;
+}
 
-   for_each_process(task) {
-      if(strcmp(task->comm, name)) {
-	       printk(KERN_INFO "Found process with PID %d", task->pid);
-         //if process ID found then exit out of the program
-        return 0;
-      }
-   }
 
-   printk(KERN_INFO "Not Found %s", name);
-  
-   return 0;
+/**@brief The find_proc function iterate over the task struct to find 
+* the process given by user. I found it prints the process PID and name
+* if not, it prints not found
+*/
+static void find_proc(char *process)
+{
+	unsigned char not_found = 1; 
+	for_each_process(task) {
+		if(!strcmp(task->comm,process)){
+			printk(KERN_INFO "for_each_process()\n");
+			not_found = 0;
+		}
+	  }	
+
+	if(not_found)
+	{
+		printk(KERN_INFO "Process <%s> not found\n",process);
+	}
 }
 
 
@@ -46,7 +59,7 @@ static int __init hello_init(void){
 *  code is used for a built-in driver (not a LKM) that this function is not required.
 */
 static void __exit hello_exit(void){
-   printk(KERN_INFO "Module unloaded\n");
+   printk(KERN_INFO "TDR: Goodbye %s from the Test LKM!\n", name);
 }
 
 /** @brief A module must use the module_init() module_exit() macros from linux/init.h, 
