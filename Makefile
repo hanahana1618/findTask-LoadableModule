@@ -1,8 +1,8 @@
-# Test - A test loadable Module
-# Copyright (c) 2016 Pons
+# Test - A simple loadable Module that finds a process and reports its PID
+# Copyright (c) 2017 Ivette Prieto Castro
 #
 #
-# Author: Pons
+# Author: Ivette Prieto Castro
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
