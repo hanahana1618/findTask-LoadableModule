@@ -16,7 +16,7 @@ struct task_struct *task;
 module_param(name, charp, S_IRUGO);
 ///< Param desc. charp = char ptr, S_IRUGO can be read/not changed
 
-MODULE_PARM_DESC(name, "The name to display in /var/log/kern.log");  ///< parameter descript
+MODULE_PARM_DESC(name, "The process name to be found");  ///< parameter descript
 
 /** @brief The LKM initialization function
  *  The static keyword restricts the visibility of the function to within this C file. The __init
