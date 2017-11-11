@@ -4,6 +4,7 @@
 #include <linux/errno.h>     // error codes
 #include <linux/sched.h>     //scheduler  
 #include <linux/string.h> //kernel string library 
+#include <linux/>
 
 
 MODULE_LICENSE("GPL");       ///< The license type -- this affects runtime behavior
@@ -12,7 +13,7 @@ MODULE_DESCRIPTION("A simple Linux Loadable Module");  ///< The description -- s
 MODULE_VERSION("1.0");              ///< The version of the module
 
 static char *name = "init";   ///< An example LKM argument -- default value is "world"
-struct stask_struct *task; ///<Pointer to task structure
+struct task_struct *task; ///<Pointer to task structure
 static void find_proc(char *process); ///<Function to find a specidied running process
 
 module_param(name, charp, S_IRUGO);
