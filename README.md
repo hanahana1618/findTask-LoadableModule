@@ -3,8 +3,8 @@ Loadable Module for Linux
 
 In order to debug and see error messages, open another terminal and execute: tail -f /var/log/kern.log
 
-The module takes a parameter, in this case name, and can be set to look for that program instead of the default init. 
+The module returns the process id of a process running in Linux. The default process is init, if you wisht to change it then identify the new parameter when inserting the module.
+
 Sample: sudo insmod findTask.ko name=bash
 
-To remove module:
-sudo rmmod findTask
+To remove module: sudo rmmod findTask
